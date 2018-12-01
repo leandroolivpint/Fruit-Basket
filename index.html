@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<title>Game</title>
+		<style>
+			body {
+				background-color: black;
+			}
+			#gameCanvas {
+				background-color: black;
+				width: 640px;
+				height: 360px;
+				margin: auto;
+				align: center;
+			}
+			#scoreboard {
+				text-align: left;
+				font-family: Segoe UI, Helvetica, Ubuntu, sans-serif;
+				color: white;
+				position: absolute;
+			}
+			#scores {
+				font-size:600%; 
+				padding:0; 
+				margin:0;
+				color: black;
+				text-shadow:-1px 0 aliceblue;
+			}
+			#textPause{
+				position: absolute;
+				margin-top:20%;
+				margin-left: 40%;
+				font-size: 70px;
+				color: dodgerblue;
+				font-weight: heavy;
+			}
+			#title {
+				background-color: white;
+				color: black;
+			}
+		</style>
+	</head>
+	<body onload='setup();'>
+
+		<div class="row">
+				<div id='gameCanvas' class="column" style="float: left;">
+					<div id = "textPause" style="visibility: hidden;">
+						Pause
+					</div>
+					<div id = "gameOver" style="visibility: hidden;">
+						
+					</div>
+				</div>
+		
+				<div id='scoreboard' class="column" style="float: left;">
+					<h1 >Pontos</h1>
+					<h4 id='scores' style="margin-top: -40px;">0</h4>
+				</div>
+
+		</div>	
+		
+
+		
+		<script type="x-shader/x-vertex" id="vertexShader">
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+				vWorldPosition = worldPosition.xyz;
+
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script type="x-shader/x-fragment" id="fragmentShader">
+
+			uniform vec3 topColor;
+			uniform vec3 bottomColor;
+			uniform float offset;
+			uniform float exponent;
+
+			varying vec3 vWorldPosition;
+
+			void main() {
+
+				float h = normalize( vWorldPosition + offset ).y;
+				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+
+			}
+
+		</script>
+
+		
+		<script src='./scripts/three.min.js'></script>
+		<script src='./scripts/keyboard.js'></script>
+		<script src='./scripts/MTLLoader.js'></script>
+		<script src='./scripts/TGALoader.js'></script>
+		<script src='./scripts/WebGL.js'></script>
+		<script src='./scripts/inflate.min.js'></script>
+		<script src='./scripts/FBXLoader.js'></script>
+		<script src='./scripts/OBJLoader.js'></script>
+		<script src='./scripts/stats.min.js'></script>
+		<script src='./scripts/game.js'></script>
+
+	</body>
+</html>
